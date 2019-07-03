@@ -1,0 +1,106 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Terminal Demo JS</title>
+  <link href="https://unpkg.com/basscss@8.0.2/css/basscss.min.css" rel="stylesheet">
+  <style>
+    html, body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+    }
+
+    button {
+      font-size: 16px;
+      margin: 10px;
+    }
+
+    #status {
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .done-mark {
+      display: none;
+    }
+  </style>
+
+  <!-- REQUIRED IMPORT OF TERMINAL SDK -->
+  <script src="https://js.stripe.com/terminal/v1/"></script>
+
+  <!-- CLIENT CODE LIVES HERE -->
+  <script src="terminal.js"></script>
+
+</head>
+<body class="mx4 my2">
+  <div id="status">
+    <strong>Status</strong>
+    <div id="connection-status-field">uninitialized</div>
+  </div>
+
+  <h4 class="mt4">
+    Step 1 - Initialize SDK <span id="step-1-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>This <a href="https://stripe.com/docs/terminal/sdk/js#initialize">initializes</a>
+     the SDK and makes it ready to interact with Stripe and hardware readers.</p>
+  <p>This involves two main steps:</p>
+  <ul>
+    <li>Including <code>&lt;script src="https://js.stripe.com/terminal/v1/"&gt;&lt;/script&gt;</code> on the page</li>
+    <li>Calling <code>StripeTerminal.create()</code></li>
+  </ul>
+  <button onClick="initializeSDK()">Initialize SDK</button>
+
+  <h4 class="mt4">
+    Step 2 - Discover Readers <span id="step-2-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>Once initialized, ask the SDK to <a href="https://stripe.com/docs/terminal/readers/connecting/verifone-p400#discover-reader">find all</a>
+    the readers registered to your Stripe account.</p>
+  <p>
+    <input id="use-simulated" type="checkbox" /> 
+    Use simulated reader (if physical readers are not connected to network or registered to your account).
+  </p>
+  <button onClick="discoverReaders()">Discover readers registered to your account</button>
+
+  <h4 class="mt4">
+    Step 3 - Connect to a Reader <span id="step-3-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>
+    A list of readers discovered on your account shows up below after discover. Select one
+    to <a href="https://stripe.com/docs/terminal/readers/connecting/verifone-p400#connect-reader">connect</a>
+    to and process payments witth.
+  </p>
+  <ul id="readers-list"></ul>
+
+  <h4 class="mt4">
+    Step 4 - Start checkout process <span id="step-4-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>Once a reader is connected, you can either <a href="https://stripe.com/docs/terminal/payments#create">start a checkout process</a>
+    or simply <a href="https://stripe.com/docs/terminal/payments/saving-cards#read-reusable-card">save a card</a>
+    without taking a payment.</p>
+  <button onClick="initiateCheckout()">Initiate checkout</button> <br />
+  or <br />
+  <button onClick="saveCardForLater()">Save card without checking out</button>
+
+  <h4 class="mt4">
+    Step 5 - Collect Payment <span id="step-5-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>
+    <a href="https://stripe.com/docs/terminal/payments#collect">Initiate</a> the payment collection flow
+    and <a href="https://stripe.com/docs/terminal/payments#process">process</a> the payment on the reader itself.
+  </p>
+  <p>At this point, the customer presents their card for payment. This step results in an authorization on the card.</p>
+  <button onClick="collectPaymentFromReader()">Collect payment from reader</button>
+
+  <h4 class="mt4">
+    Step 6 - Capture Payment <span id="step-6-done" class="done-mark">&#9989;</span>
+  </h4>
+  <p>All payments with Terminal need to be <a href="https://stripe.com/docs/terminal/payments#capture">manually captured</a>
+    in the backend. In this demo, this button triggers the capture.</p>
+  <button onClick="capturePaymentIntent()">Capture payment</button>
+</body>
+</html>
